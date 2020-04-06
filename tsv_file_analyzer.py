@@ -1,3 +1,4 @@
+
 import csv
 import os
 import sys
@@ -22,12 +23,16 @@ position_to_header_lookup = {}
 
 def display_record(parts, rec_ctr, line_ctr):
 
-    print("Here record number '{}' (at line '{}')".format(rec_ctr, line_ctr))
+    print(Fore.YELLOW + "\nHere record number '{}' (at line '{}')".format(rec_ctr, line_ctr))
+    print(Style.RESET_ALL + '', end='')
 
     for i, field in enumerate(parts):
         field = field.replace('"', '')
         header = position_to_header_lookup[i]
-        print("{}: {}".format(header, field))
+        print(Fore.BLUE + "{}:".format(header), end='')
+        print(Style.RESET_ALL + '', end='')
+        print(" {}".format(field))
+        # print("{}: {}".format(header, field))
 
 
 
