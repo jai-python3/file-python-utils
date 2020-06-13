@@ -14,6 +14,8 @@ from datetime import date
 
 DEFAULT_COLUMNS_ONLY = False
 
+DEFAULT_COLUMNS_LOWERCASE = False
+
 DEFAULT_OUTDIR = "/tmp/" + os.path.basename(__file__) + '/' + str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))
 
 LOGGING_FORMAT = "%(levelname)s : %(asctime)s : %(pathname)s : %(lineno)d : %(message)s"
@@ -24,16 +26,19 @@ LOG_LEVEL = logging.INFO
 position_to_header_lookup = {}
 
 
-def display_columns(parts):
+def display_columns(parts, lowercase):
 
     print(Fore.YELLOW + "\nHere are the columns\n")
     print(Style.RESET_ALL + '', end='')
 
     for i, field in enumerate(parts, 1):
-        field = field.replace('"', '')      
-        print("{}. ".format(i), end='')  
-        print(Fore.BLUE + "{}".format(field))
-        print(Style.RESET_ALL + '', end='')
+        field = field.replace('"', '')
+        if not lowercase:
+            print("{}. ".format(i), end='')  
+            print(Fore.BLUE + "{}".format(field))
+            print(Style.RESET_ALL + '', end='')
+        else:
+            print("{}".format(field.lower()))
 
 
 def display_record(parts, rec_ctr, line_ctr):
@@ -56,7 +61,8 @@ def display_record(parts, rec_ctr, line_ctr):
 @click.option('--infile', help="The tab-delimited file to be analyzed")
 @click.option('--logfile', help="The log file")
 @click.option('--columns_only', is_flag=True, help="If specified, will only display the column names")
-def main(outdir, infile, logfile, columns_only):
+@click.option('--columns_lowercase', is_flag=True, help="If specified, will only display the column names in lowercase without numbers")
+def main(outdir, infile, logfile, columns_only, columns_lowercase):
     """Analyze a tab-delimited file
     """
 
@@ -96,6 +102,12 @@ def main(outdir, infile, logfile, columns_only):
         print(Fore.YELLOW + "--columns_only was not specified and therefore was set to '{}'".format(columns_only))
         print(Style.RESET_ALL + '', end='')
 
+    if columns_only:
+        if columns_lowercase is None:
+            columns_lowercase = DEFAULT_COLUMNS_LOWERCASE
+            print(Fore.YELLOW + "--columns_lowercase was not specified and therefore was set to '{}'".format(columns_lowercase))
+            print(Style.RESET_ALL + '', end='')
+
     logging.basicConfig(filename=logfile, format=LOGGING_FORMAT, level=LOG_LEVEL)
 
     global position_to_header_lookup
@@ -112,7 +124,7 @@ def main(outdir, infile, logfile, columns_only):
                     header = header.replace('"', '')
                     position_to_header_lookup[i] = header.strip()
                 if columns_only:
-                    display_columns(parts)
+                    display_columns(parts, columns_lowercase)
                     break
                 continue
             else:
