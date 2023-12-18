@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install File Python Utils, run this command in your terminal:
+To install Data File Utils, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install file_python_utils
+    $ pip install data_file_utils
 
-This is the preferred method to install File Python Utils, as it will always install the most recent stable release.
+This is the preferred method to install Data File Utils, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,19 +26,19 @@ you through the process.
 From sources
 ------------
 
-The sources for File Python Utils can be downloaded from the `Github repo`_.
+The sources for Data File Utils can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/jai-python3/file_python_utils
+    $ git clone git://github.com/jai-python3/data_file_utils
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/jai-python3/file_python_utils/tarball/master
+    $ curl -OJL https://github.com/jai-python3/data_file_utils/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/jai-python3/file_python_utils
-.. _tarball: https://github.com/jai-python3/file_python_utils/tarball/master
+.. _Github repo: https://github.com/jai-python3/data_file_utils
+.. _tarball: https://github.com/jai-python3/data_file_utils/tarball/master

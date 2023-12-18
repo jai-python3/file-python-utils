@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: clean clean-build clean-pyc clean-test coverage dist docs help install lint lint/flake8
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -47,25 +47,27 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## check style with flake8
-	flake8 file_python_utils tests
+lint/flake8: ## check style with flake8
+	flake8 data_file_utils tests
+
+lint: lint/flake8 ## check style
 
 test: ## run tests quickly with the default Python
-	pytest
+	python setup.py test
 
 test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source file_python_utils -m pytest
+	coverage run --source data_file_utils setup.py test
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/file_python_utils.rst
+	rm -f docs/data_file_utils.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ file_python_utils
+	sphinx-apidoc -o docs/ data_file_utils
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html

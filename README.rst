@@ -1,26 +1,14 @@
-=================
-File Python Utils
-=================
-
-
-.. image:: https://img.shields.io/pypi/v/file_python_utils.svg
-        :target: https://pypi.python.org/pypi/file_python_utils
-
-.. image:: https://img.shields.io/travis/jai-python3/file_python_utils.svg
-        :target: https://travis-ci.org/jai-python3/file_python_utils
-
-.. image:: https://readthedocs.org/projects/file-python-utils/badge/?version=latest
-        :target: https://file-python-utils.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
+===============
+Data File Utils
+===============
 
 
 
 
-Collection of Python utils for processing files and directories
 
 
-* Free software: GNU General Public License v3
-* Documentation: https://file-python-utils.readthedocs.io.
+Collection of Python scripts/utils for file manipulation tasks
+
 
 
 Features

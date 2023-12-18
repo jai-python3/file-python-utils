@@ -1,4 +1,4 @@
-Welcome to File Python Utils's documentation!
+Welcome to Data File Utils's documentation!
 ======================================
 
 .. toctree::

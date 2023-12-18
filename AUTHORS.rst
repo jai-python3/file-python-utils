@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Jai Python3 <jai.python3@gmail.com>
+* Jaideep Sundaram <jai.python3@gmail.com>
 
 Contributors
 ------------

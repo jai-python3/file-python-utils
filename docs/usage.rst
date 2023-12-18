@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use File Python Utils in a project::
+To use Data File Utils in a project::
 
-    import file_python_utils
+    import data_file_utils

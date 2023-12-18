@@ -12,42 +12,36 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['Click>=7.0', ]
 
-setup_requirements = ['pytest-runner', ]
-
-test_requirements = ['pytest>=3', ]
+test_requirements = [ ]
 
 setup(
-    author="Jai Python3",
+    author="Jaideep Sundaram",
     author_email='jai.python3@gmail.com',
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Collection of Python utils for processing files and directories",
+    description="Collection of Python scripts/utils for file manipulation tasks",
     entry_points={
         'console_scripts': [
-            'file_python_utils=file_python_utils.cli:main',
+            'data_file_utils=data_file_utils.cli:main',
         ],
     },
     install_requires=requirements,
-    license="GNU General Public License v3",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
-    keywords='file_python_utils',
-    name='file_python_utils',
-    packages=find_packages(include=['file_python_utils', 'file_python_utils.*']),
-    setup_requires=setup_requirements,
+    keywords='data_file_utils',
+    name='data_file_utils',
+    packages=find_packages(include=['data_file_utils', 'data_file_utils.*']),
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/jai-python3/file_python_utils',
+    url='https://github.com/jai-python3/data_file_utils',
     version='0.1.0',
     zip_safe=False,
 )

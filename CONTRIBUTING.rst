@@ -15,7 +15,7 @@ Types of Contributions
 Report Bugs
 ~~~~~~~~~~~
 
-Report bugs at https://github.com/jai-python3/file_python_utils/issues.
+Report bugs at https://github.com/jai-python3/data_file_utils/issues.
 
 If you are reporting a bug, please include:
 
@@ -38,14 +38,14 @@ and "help wanted" is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-File Python Utils could always use more documentation, whether as part of the
-official File Python Utils docs, in docstrings, or even on the web in blog posts,
+Data File Utils could always use more documentation, whether as part of the
+official Data File Utils docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback
 ~~~~~~~~~~~~~~~
 
-The best way to send feedback is to file an issue at https://github.com/jai-python3/file_python_utils/issues.
+The best way to send feedback is to file an issue at https://github.com/jai-python3/data_file_utils/issues.
 
 If you are proposing a feature:
 
@@ -57,17 +57,17 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `file_python_utils` for local development.
+Ready to contribute? Here's how to set up `data_file_utils` for local development.
 
-1. Fork the `file_python_utils` repo on GitHub.
+1. Fork the `data_file_utils` repo on GitHub.
 2. Clone your fork locally::
 
-    $ git clone git@github.com:your_name_here/file_python_utils.git
+    $ git clone git@github.com:your_name_here/data_file_utils.git
 
 3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
 
-    $ mkvirtualenv file_python_utils
-    $ cd file_python_utils/
+    $ mkvirtualenv data_file_utils
+    $ cd data_file_utils/
     $ python setup.py develop
 
 4. Create a branch for local development::
@@ -79,7 +79,7 @@ Ready to contribute? Here's how to set up `file_python_utils` for local developm
 5. When you're done making changes, check that your changes pass flake8 and the
    tests, including testing other Python versions with tox::
 
-    $ flake8 file_python_utils tests
+    $ flake8 data_file_utils tests
     $ python setup.py test or pytest
     $ tox
 
@@ -103,7 +103,7 @@ Before you submit a pull request, check that it meets these guidelines:
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
 3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8, and for PyPy. Check
-   https://travis-ci.org/jai-python3/file_python_utils/pull_requests
+   https://travis-ci.com/jai-python3/data_file_utils/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
 Tips
@@ -111,8 +111,8 @@ Tips
 
 To run a subset of tests::
 
-$ pytest tests.test_file_python_utils
 
+    $ python -m unittest tests.test_data_file_utils
 
 Deploying
 ---------
