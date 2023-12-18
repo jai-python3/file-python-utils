@@ -54,7 +54,7 @@ make clean
 
 ### Developers
 
-If you modify the code in this package:
+If you modify the code in this package in your local virtual environment:
 
 ```shell
 pip uninstall data-file-utils
@@ -62,13 +62,52 @@ make clean
 python setup.py sdist
 pip install .
 ```
+If you want to export the code in this package to the PYPI repository:
+
+Install `twine` and `setuptools`:
+
+```shell
+pip install twine setuptools
+```
+
+
+Build the Distribution Package
+
+```shell
+python setup.py sdist bdist_wheel
+```
+
+Configure your ~/.pypirc:
+
+```bash
+[pypi]
+  username = __token__
+  password = pypi-YOUR-TOKEN
+```
+
+Upload Your Package to PyPI
+
+```shell
+twine upload dist/*
+```
+
+
+Now you can install your package in your Python virtual environment
+
+```shell
+pip install data-file-utils
+```
+
+
+
 
 ![class diagrams](class_diagrams.png)
+
 
 ## Usage
 
 ```python
-import 
+import
 
 config_file = "conf/config.yaml"
 config = yaml.safe_load(Path(config_file).read_text())
