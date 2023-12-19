@@ -7,8 +7,11 @@ Collection of  Python scripts/utils for facilitating file manipulation tasks.
   - [Use Cases](#use-cases)
   - [Installation](#installation)
     - [Developers](#developers)
-  - [Usage](#usage)
   - [Exported scripts](#exported-scripts)
+    - [tsv2json](#tsv2json)
+    - [jsonl2json](#jsonl2json)
+  - [compare-tab-files](#compare-tab-files)
+    - [analyze-record-tuples](#analyze-record-tuples)
   - [Contributing](#contributing)
   - [To-Do/Coming Next](#to-docoming-next)
   - [CHANGELOG](#changelog)
@@ -29,7 +32,7 @@ Please see the [TODO](TODO.md) for a list of upcoming improvements.
 
 ## Use Cases
 
-![use case diagram](use_case.png)
+![use case diagram](use_cases.png)
 
 
 ## Installation
@@ -104,33 +107,29 @@ pip install data-file-utils
 ![class diagrams](class_diagrams.png)
 
 
-## Usage
-
-```python
-import
-
-config_file = "conf/config.yaml"
-config = yaml.safe_load(Path(config_file).read_text())
-
-tbd = TBD(
-    config=config,
-    config_file=config_file,
-    logfile=logfile,
-    outdir=outdir,
-    outfile=outfile,
-    verbose=verbose,
-)
-
-tbd.tbd()
-```
 
 ## Exported scripts
 
-To use the exported script for ... :
+To use the following exported scripts:
+- tsv2json
+- jsonl2json
+- compare-tab-files
+- analyze-record-tuples
 
-```bash
+### tsv2json
+This script will parse a tab-delimited file and write a JSON file.
 
-```
+### jsonl2json
+This script will parse a JSONL file and write a JSON file for each line in the JSONL file.
+
+## compare-tab-files
+This script will parse two tab-delimited files and generate a report to indicate which lines and columns are different.
+
+### analyze-record-tuples
+This script will determine which records are missing from either of the two tab-delimited files. Some specified number of columns will make up the unique tuple
+for each line/record.
+
+
 
 ## Contributing
 

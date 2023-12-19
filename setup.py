@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0', ]
+requirements = ['Click>=7.0', "PyYAML", "Rich", "xlsxwriter"]
 
 test_requirements = [ ]
 
@@ -30,7 +30,10 @@ setup(
     description="Collection of Python scripts/utils for file manipulation tasks",
     entry_points={
         'console_scripts': [
-            'data_file_utils=data_file_utils.cli:main',
+            'tsv2json=data_file_utils.tsv2json:main',
+            'analyze-record-tuples=data_file_utils.analyze_record_tuples:main',
+            'compare-tab-files=data_file_utils.compare_tab_files:main',
+            'jsonl2json=data_file_utils.jsonl2json:main',
         ],
     },
     install_requires=requirements,
@@ -39,9 +42,10 @@ setup(
     keywords='data_file_utils',
     name='data_file_utils',
     packages=find_packages(include=['data_file_utils', 'data_file_utils.*']),
+    package_data={"data_file_utils": ["conf/config.yaml"]},
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/jai-python3/data_file_utils',
+    url='https://github.com/jai-python3/data-file-utils',
     version='0.1.0',
     zip_safe=False,
 )
