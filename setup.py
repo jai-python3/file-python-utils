@@ -10,7 +10,12 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0', "PyYAML", "Rich", "xlsxwriter"]
+requirements = [
+    'Click>=7.0',
+    "PyYAML",
+    "Rich",
+    "xlsxwriter"
+]
 
 test_requirements = [ ]
 
@@ -34,6 +39,7 @@ setup(
             'analyze-record-tuples=data_file_utils.analyze_record_tuples:main',
             'compare-tab-files=data_file_utils.compare_tab_files:main',
             'jsonl2json=data_file_utils.jsonl2json:main',
+            'xlsx2tsv=data_file_utils.xlsx2tsv:main',
         ],
     },
     install_requires=requirements,
@@ -46,6 +52,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/jai-python3/data-file-utils',
-    version='0.2.0',
+    version='0.3.0',
     zip_safe=False,
 )

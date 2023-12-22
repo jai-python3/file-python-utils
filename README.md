@@ -1,17 +1,19 @@
 # Data File Utils
+
 Collection of  Python scripts/utils for facilitating file manipulation tasks.
 
 - [Data File Utils](#data-file-utils)
   - [Motivation](#motivation)
   - [Improvements](#improvements)
   - [Use Cases](#use-cases)
+  - [Class Diagrams](#class-diagrams)
   - [Installation](#installation)
-    - [Developers](#developers)
   - [Exported scripts](#exported-scripts)
-    - [tsv2json](#tsv2json)
-    - [jsonl2json](#jsonl2json)
-  - [compare-tab-files](#compare-tab-files)
     - [analyze-record-tuples](#analyze-record-tuples)
+    - [compare-tab-files](#compare-tab-files)
+    - [jsonl2json](#jsonl2json)
+    - [tsv2json](#tsv2json)
+    - [xlsx2tsv](#xlsx2tsv)
   - [Contributing](#contributing)
   - [To-Do/Coming Next](#to-docoming-next)
   - [CHANGELOG](#changelog)
@@ -35,106 +37,62 @@ Please see the [TODO](TODO.md) for a list of upcoming improvements.
 ![use case diagram](use_cases.png)
 
 
-## Installation
-
-Clone this project and then run the pip installer
-
-```bash
-git clone https://github.com/jai-python3/data-file-utils.git
-cd data-file-utils
-virtualenv -p python3 venv
-source venv/bin/activate
-python setup.py sdist
-pip install .
-```
-
-You can uninstall like this:
-
-```bash
-pip uninstall data-file-utils
-make clean
-```
-
-### Developers
-
-If you modify the code in this package in your local virtual environment:
-
-```shell
-pip uninstall data-file-utils
-make clean
-python setup.py sdist
-pip install .
-```
-If you want to export the code in this package to the PYPI repository:
-
-Install `twine` and `setuptools`:
-
-```shell
-pip install twine setuptools
-```
-
-
-Build the Distribution Package
-
-```shell
-python setup.py sdist bdist_wheel
-```
-
-Configure your ~/.pypirc:
-
-```bash
-[pypi]
-  username = __token__
-  password = pypi-YOUR-TOKEN
-```
-
-Upload Your Package to PyPI
-
-```shell
-twine upload dist/*
-```
-
-
-Now you can install your package in your Python virtual environment
-
-```shell
-pip install data-file-utils
-```
-
-
-
+## Class Diagrams
 
 ![class diagrams](class_diagrams.png)
 
+
+## Installation
+
+See the install [instructions](INSTALL.md).
 
 
 ## Exported scripts
 
 To use the following exported scripts:
-- tsv2json
-- jsonl2json
-- compare-tab-files
 - analyze-record-tuples
-
-### tsv2json
-This script will parse a tab-delimited file and write a JSON file.
-
-### jsonl2json
-This script will parse a JSONL file and write a JSON file for each line in the JSONL file.
-
-## compare-tab-files
-This script will parse two tab-delimited files and generate a report to indicate which lines and columns are different.
-
+- compare-tab-files
+- jsonl2json
+- tsv2json
+- xlsx2tsv
+ 
 ### analyze-record-tuples
 This script will determine which records are missing from either of the two tab-delimited files. Some specified number of columns will make up the unique tuple
 for each line/record.
 
+### compare-tab-files
+This script will parse two tab-delimited files and generate a report to indicate which lines and columns are different.
+
+### jsonl2json
+This script will parse a JSONL file and write a JSON file for each line in the JSONL file.
+
+### tsv2json
+This script will parse a tab-delimited file and write a JSON file.
+
+### xlsx2tsv
+This script will parse an Excel file and write a tab-delimited file for each worksheet.
+
+Sample invocation:
+
+
+```shell
+xlsx2tsv --infile ~/projects/experiments/xlsx2tsv/genetics.xlsx 
+--config_file was not specified and therefore was set to '/home/sundaram/projects/experiments/xlsx2tsv/venv/lib/python3.10/site-packages/data_file_utils/conf/config.yaml'
+--outdir was not specified and therefore was set to '/tmp/xlsx2tsv/2023-12-22-142224'
+Created output directory '/tmp/xlsx2tsv/2023-12-22-142224'
+--logfile was not specified and therefore was set to '/tmp/xlsx2tsv/2023-12-22-142224/xlsx2tsv.log'
+Sheet 'genes' has been written to '/tmp/xlsx2tsv/2023-12-22-142224/genes.tsv'
+Sheet 'transcripts' has been written to '/tmp/xlsx2tsv/2023-12-22-142224/transcripts.tsv'
+Sheet 'proteins' has been written to '/tmp/xlsx2tsv/2023-12-22-142224/proteins.tsv'
+The log file is '/tmp/xlsx2tsv/2023-12-22-142224/xlsx2tsv.log'
+Execution of '/home/sundaram/projects/experiments/xlsx2tsv/venv/lib/python3.10/site-packages/data_file_utils/xlsx2tsv.py' completed
+```
 
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+Pull requests are welcome.<br>
+For major changes, please open an issue first to discuss what you would like to change.
 
 ## To-Do/Coming Next
 
