@@ -34,7 +34,7 @@ Please see the [TODO](TODO.md) for a list of upcoming improvements.
 
 ## Use Cases
 
-![use case diagram](use_cases.png)
+![use case diagram](use_cases.png | width=300 height=200 )
 
 
 ## Class Diagrams
