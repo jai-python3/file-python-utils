@@ -6,7 +6,6 @@ Collection of  Python scripts/utils for facilitating file manipulation tasks.
   - [Motivation](#motivation)
   - [Improvements](#improvements)
   - [Use Cases](#use-cases)
-  - [Class Diagrams](#class-diagrams)
   - [Installation](#installation)
   - [Exported scripts](#exported-scripts)
     - [analyze-record-tuples](#analyze-record-tuples)
@@ -34,12 +33,7 @@ Please see the [TODO](TODO.md) for a list of upcoming improvements.
 
 ## Use Cases
 
-![use case diagram](use_cases.png | width=300 height=200 )
-
-
-## Class Diagrams
-
-![class diagrams](class_diagrams.png)
+<img src="use_cases.png" width="400" height="400" alt="Use Cases diagram">
 
 
 ## Installation
