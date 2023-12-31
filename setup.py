@@ -54,6 +54,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/jai-python3/data-file-utils',
-    version='0.3.1',
+    version='0.4.0',
     zip_safe=False,
 )
