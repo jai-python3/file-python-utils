@@ -90,9 +90,6 @@ def _execute_cmd(
     if verbose:
         print(f"Will attempt to execute '{cmd}'")
 
-    return None
-
-
     if outdir is None:
         outdir = "/tmp"
         logging.info(
@@ -225,14 +222,13 @@ def main(logfile: str, outdir: str, part: str, verbose: bool):
 
     bakfile = backup_file(DEFAULT_PRE_COMMIT_HOOK_FILE)
 
-    cmd = f"bump2version {part}"
+    cmd = f"bumpversion {part}"
 
     _execute_cmd(cmd, outdir=outdir, verbose=verbose)
 
     if bakfile is not None:
         if os.path.exists(bakfile):
-            # restore_file(bakfile)
-            pass
+            restore_file(bakfile)
         else:
             raise Exception(f"File '{bakfile}' does not exist")
     else:
