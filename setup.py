@@ -41,6 +41,7 @@ setup(
             'compare-tab-files=data_file_utils.compare_tab_files:main',
             'jsonl2json=data_file_utils.jsonl2json:main',
             'xlsx2tsv=data_file_utils.xlsx2tsv:main',
+            'delete-old-files=data_file_utils.delete_users_files:main',
         ],
     },
     install_requires=requirements,

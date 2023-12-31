@@ -10,6 +10,7 @@ Collection of  Python scripts/utils for facilitating file manipulation tasks.
   - [Exported scripts](#exported-scripts)
     - [analyze-record-tuples](#analyze-record-tuples)
     - [compare-tab-files](#compare-tab-files)
+    - [delete-old-files](#delete-old-files)
     - [jsonl2json](#jsonl2json)
     - [tsv2json](#tsv2json)
     - [xlsx2tsv](#xlsx2tsv)
@@ -46,6 +47,7 @@ See the install [instructions](INSTALL.md).
 To use the following exported scripts:
 - analyze-record-tuples
 - compare-tab-files
+- delete-old-files
 - jsonl2json
 - tsv2json
 - xlsx2tsv
@@ -56,6 +58,9 @@ for each line/record.
 
 ### compare-tab-files
 This script will parse two tab-delimited files and generate a report to indicate which lines and columns are different.
+
+### delete-old-files
+This script will delete all old files belonging to the current or specified username in the /tmp or specified directory.
 
 ### jsonl2json
 This script will parse a JSONL file and write a JSON file for each line in the JSONL file.

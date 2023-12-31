@@ -1,3 +1,9 @@
+## [v0.4.0](https://github.com/jai-python3/data-file-utils/tree/v0.4.0) - 2023-12-30
+
+ADDS:
+- delete-old-files
+
+
 ## [v0.3.1](https://github.com/jai-python3/data-file-utils/tree/v0.3.1) - 2023-12-22
 
 FIXES:
