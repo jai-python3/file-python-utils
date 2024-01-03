@@ -1,3 +1,11 @@
+## [v0.5.0](https://github.com/jai-python3/data-file-utils/tree/v0.5.0) - 2024-01-02
+
+ADDS:
+- backup-file
+- backup-dir
+- archive-dir
+- create-tmp-dir
+
 ## [v0.4.0](https://github.com/jai-python3/data-file-utils/tree/v0.4.0) - 2023-12-30
 
 ADDS:
