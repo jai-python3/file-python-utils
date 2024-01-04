@@ -46,6 +46,7 @@ setup(
             'archive-dir=data_file_utils.archive_dir:main',
             'backup-dir=data_file_utils.backup_dir:main',
             'create-tmp-dir=data_file_utils.create_tmp_dir:main',
+            'profile-data-file=data_file_utils.profile_data_file:main',
         ],
     },
     install_requires=requirements,

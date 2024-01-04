@@ -16,6 +16,7 @@ Collection of  Python scripts/utils for facilitating file manipulation tasks.
     - [create-tmp-dir](#create-tmp-dir)
     - [delete-old-files](#delete-old-files)
     - [jsonl2json](#jsonl2json)
+    - [profile-data-file](#profile-data-file)
     - [tsv2json](#tsv2json)
     - [xlsx2tsv](#xlsx2tsv)
   - [Contributing](#contributing)
@@ -57,6 +58,7 @@ To use the following exported scripts:
 - create-tmp-dir
 - delete-old-files
 - jsonl2json
+- profile-data-file
 - tsv2json
 - xlsx2tsv
  
@@ -127,6 +129,28 @@ This script will delete all old files belonging to the current or specified user
 
 ### jsonl2json
 This script will parse a JSONL file and write a JSON file for each line in the JSONL file.
+
+### profile-data-file
+
+This script will output the following attributes of a specified file:
+- date created
+- md5sum
+- line count
+- byte size
+  
+Sample invocation:
+
+
+```shell
+python data_file_utils/profile_data_file.py requirements.txt
+File: /home/sundaram/projects/data-file-utils/requirements.txt
+md5sum: 2063352be9cbfa5bd1f1425524dbb77b
+create_date: 2023-12-18 11:35:54.242520
+byte_size: 14
+line_count: 2
+```
+
+
 
 ### tsv2json
 This script will parse a tab-delimited file and write a JSON file.
