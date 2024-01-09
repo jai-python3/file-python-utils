@@ -7,6 +7,7 @@ Collection of  Python scripts/utils for facilitating file manipulation tasks.
   - [Improvements](#improvements)
   - [Use Cases](#use-cases)
   - [Installation](#installation)
+  - [Generate shell wrapper scripts](#generate-shell-wrapper-scripts)
   - [Exported scripts](#exported-scripts)
     - [analyze-record-tuples](#analyze-record-tuples)
     - [archive-dir](#archive-dir)
@@ -45,6 +46,14 @@ Please see the [TODO](TODO.md) for a list of upcoming improvements.
 ## Installation
 
 See the install [instructions](INSTALL.md).
+
+## Generate shell wrapper scripts
+
+After executing `pip install data-file-utils`, execute this exported script: `make_executables_and_aliases.py`.<br>
+This will create the wrapper shell scripts and a file containing aliases named `data-file-utils-aliases.txt` in the current directory.<br><br>
+You can then add this line to your .bashrc or .zshrc:<br>
+`source dir/data-file-utils-aliases.txt`<br>
+where dir is the directory that contains the aliases file.
 
 
 ## Exported scripts
