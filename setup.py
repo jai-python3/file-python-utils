@@ -47,6 +47,8 @@ setup(
             'backup-dir=data_file_utils.backup_dir:main',
             'create-tmp-dir=data_file_utils.create_tmp_dir:main',
             'profile-data-file=data_file_utils.profile_data_file:main',
+            'find-last-file=data_file_utils.find_last_file:main',
+            'find-last-directory=data_file_utils.find_last_directory:main',
         ],
     },
     install_requires=requirements,

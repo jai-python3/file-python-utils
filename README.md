@@ -66,6 +66,8 @@ To use the following exported scripts:
 - compare-tab-files
 - create-tmp-dir
 - delete-old-files
+- find-last-directory
+- find-last-file
 - jsonl2json
 - profile-data-file
 - tsv2json
