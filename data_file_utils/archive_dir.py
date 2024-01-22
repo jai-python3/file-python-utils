@@ -1,13 +1,8 @@
 """Archive a directory in-place."""
-import subprocess
-import os
-import logging
-import sys
 import click
-import pathlib
-import pathlib
-
-from pathlib import Path
+import os
+import subprocess
+import sys
 
 from datetime import datetime
 from rich.console import Console
@@ -54,7 +49,11 @@ def archive_directory(directory_path: str) -> None:
 @click.command()
 @click.argument('indir', type=str, required=True)
 def main(indir: str):
-    """Archive a directory in-place."""
+    """Archive a directory in-place.
+
+    Args:
+        indir (str): the directory to be archived in-place
+    """
 
     error_ctr = 0
 

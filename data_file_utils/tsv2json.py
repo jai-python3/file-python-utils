@@ -1,23 +1,25 @@
-import csv
-import logging
-import os
-import os
-import sys
+"""Convert the tab-delimited file to a JSON file."""
 import click
-import pathlib
+import csv
 import json
 import logging
-import calendar
-import time
+import os
 import pathlib
+import sys
 import yaml
-from pathlib import Path
-
-from typing import Any, Dict
 
 from datetime import datetime
+from pathlib import Path
 from rich.console import Console
-from rich.logging import RichHandler
+from typing import Any, Dict, Optional
+
+from file_utils import check_infile_status
+from console_helper import print_green, print_red, print_yellow
+
+
+DEFAULT_PROJECT = "data-file-utils"
+
+DEFAULT_TIMESTAMP = str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))
 
 DEFAULT_HEADER_LINE = 1
 DEFAULT_START_LINE = 2
@@ -25,8 +27,10 @@ DEFAULT_INCLUDE_LINE_NUMBERS = False
 
 DEFAULT_OUTDIR = os.path.join(
     '/tmp/',
+    os.getenv('USER'),
+    DEFAULT_PROJECT,
     os.path.splitext(os.path.basename(__file__))[0],
-    str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))
+    DEFAULT_TIMESTAMP
 )
 
 DEFAULT_CONFIG_FILE = os.path.join(
@@ -35,19 +39,17 @@ DEFAULT_CONFIG_FILE = os.path.join(
     'config.yaml'
 )
 
-CONFIG = {}
 
 DEFAULT_LOGGING_FORMAT = "%(levelname)s : %(asctime)s : %(pathname)s : %(lineno)d : %(message)s"
 
 DEFAULT_LOGGING_LEVEL = logging.INFO
 
-DEFAULT_VERBOSE = True
+DEFAULT_VERBOSE = False
 
 
 error_console = Console(stderr=True, style="bold red")
 
 console = Console()
-
 
 
 def convert_file(
@@ -57,7 +59,15 @@ def convert_file(
     start_line: int = DEFAULT_START_LINE,
     include_line_numbers: bool = DEFAULT_INCLUDE_LINE_NUMBERS
 ) -> None:
+    """Convert the tab-delimited file to a JSON file.
 
+    Args:
+        infile (str): The tab-delimited file to be converted.
+        outfile (str): The output JSON file.
+        header_line (int, optional): The line number that contains the column headers. Defaults to DEFAULT_HEADER_LINE.
+        start_line (int, optional): The line number where the first record begins. Defaults to DEFAULT_START_LINE.
+        include_line_numbers (bool, optional): If True, the output will include the line number of the record in the source tab-delimited file. Defaults to DEFAULT_INCLUDE_LINE_NUMBERS.
+    """
 
     record_lookup = get_record_lookup(infile, header_line, start_line, include_line_numbers)
     # Write the list of ordered dictionaries to a JSON file
@@ -69,6 +79,20 @@ def convert_file(
         json.dump(lookup, json_file, indent=2)
 
 def get_record_lookup(infile: str, header_line: int = 2, start_line: int = 3, include_line_numbers: bool = DEFAULT_INCLUDE_LINE_NUMBERS) -> Dict[str, Any]:
+    """Parse the input tab-delimited file and get the record lookup.
+
+    Args:
+        infile (str): The input tab-delimited file.
+        header_line (int, optional): The line number at which the column headers can be found. Defaults to 2.
+        start_line (int, optional): The line number at which the first record can be found. Defaults to 3.
+        include_line_numbers (bool, optional): If True, the line numbers will be included in the record objects in the JSON file. Defaults to DEFAULT_INCLUDE_LINE_NUMBERS.
+
+    Raises:
+        Exception: If the input file does not exist.
+
+    Returns:
+        Dict[str, Any]: The record lookup.
+    """
 
     if not os.path.exists(infile):
         raise Exception(f"file '{infile}' does not exist")
@@ -105,39 +129,21 @@ def get_record_lookup(infile: str, header_line: int = 2, start_line: int = 3, in
     return record_list
 
 
-def check_infile_status(infile: str = None, extension: str = None) -> None:
-    """Check if the file exists, if it is a regular file and whether it has content.
+def validate_verbose(ctx, param, value):
+    """Validate the verbose flag.
 
     Args:
-        infile (str): the file to be checked
+        ctx (Context): The click context.
+        param (str): The parameter name.
+        value (bool): The value of the parameter.
 
-    Raises:
-        None
+    Returns:
+        bool: The value of the parameter.
     """
-
-    error_ctr = 0
-
-    if infile is None or infile == '':
-        error_console.print(f"'{infile}' is not defined")
-        error_ctr += 1
-    else:
-        if not os.path.exists(infile):
-            error_ctr += 1
-            error_console.print(f"'{infile}' does not exist")
-        else:
-            if not os.path.isfile(infile):
-                error_ctr += 1
-                error_console.print(f"'{infile}' is not a regular file")
-            if os.stat(infile).st_size == 0:
-                error_console.print(f"'{infile}' has no content")
-                error_ctr += 1
-            if extension is not None and not infile.endswith(extension):
-                error_console.print(f"'{infile}' does not have filename extension '{extension}'")
-                error_ctr += 1
-
-    if error_ctr > 0:
-        error_console.print(f"Detected problems with input file '{infile}'")
-        sys.exit(1)
+    if value is None:
+        click.secho("--verbose was not specified and therefore was set to 'True'", fg='yellow')
+        return DEFAULT_VERBOSE
+    return value
 
 
 @click.command()
@@ -146,62 +152,62 @@ def check_infile_status(infile: str = None, extension: str = None) -> None:
 @click.option('--include_line_numbers', is_flag=True, help=f"Optional: To include the line numbers in the JSON - default is '{DEFAULT_INCLUDE_LINE_NUMBERS}'")
 @click.option('--infile', help="Required: The primary input file")
 @click.option('--logfile', help="Optional: The log file")
-@click.option('--outdir', help="Optional: The default is the current working directory - default is '{DEFAULT_OUTDIR}'")
+@click.option('--outdir', help=f"Optional: The default is the current working directory - default is '{DEFAULT_OUTDIR}'")
 @click.option('--outfile', help="Optional: The output final report file")
 @click.option('--start_line', help=f"Optional: The line number the data rows begin - default is '{DEFAULT_START_LINE}'")
-@click.option('--verbose', is_flag=True, help=f"Optional: Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'")
-def main(config_file: str, header_line: int, include_line_numbers: bool, infile: str, logfile: str, outdir: str, outfile: str, start_line: int, verbose: bool):
+@click.option('--verbose', is_flag=True, help=f"Optional: Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'.", callback=validate_verbose)
+def main(config_file: Optional[str], header_line: Optional[int], include_line_numbers: Optional[bool], infile: str, logfile: Optional[str], outdir: Optional[str], outfile: Optional[str], start_line: Optional[int], verbose: Optional[bool]):
     """Convert tab-delimited file into JSON file."""
 
     error_ctr = 0
 
     if infile is None:
-        error_console.print("--infile was not specified")
+        print_red("--infile was not specified")
         error_ctr += 1
 
     if error_ctr > 0:
+        click.echo(click.get_current_context().get_help())
         sys.exit(1)
 
 
     if config_file is None:
         config_file = DEFAULT_CONFIG_FILE
-        console.print(f"[yellow]--config_file was not specified and therefore was set to '{config_file}'[/]")
+        print_yellow(f"--config_file was not specified and therefore was set to '{config_file}'")
 
     if header_line is None:
         header_line = DEFAULT_HEADER_LINE
-        console.print(f"[yellow]--header_line was not specified and therefore was set to '{header_line}'[/]")
+        print_yellow(f"--header_line was not specified and therefore was set to '{header_line}'")
 
     if include_line_numbers is None:
         include_line_numbers = DEFAULT_INCLUDE_LINE_NUMBERS
-        console.print(f"[yellow]--include_line_numbers was not specified and therefore was set to '{include_line_numbers}'[/]")
+        print_yellow(f"--include_line_numbers was not specified and therefore was set to '{include_line_numbers}'")
 
     if outdir is None:
         outdir = DEFAULT_OUTDIR
-        console.print(f"[yellow]--outdir was not specified and therefore was set to '{outdir}'[/]")
+        print_yellow(f"--outdir was not specified and therefore was set to '{outdir}'")
 
 
     if not os.path.exists(outdir):
         pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
-
-        console.print(f"[yellow]Created output directory '{outdir}'[/]")
+        print_yellow(f"Created output directory '{outdir}'")
 
     if logfile is None:
         logfile = os.path.join(
             outdir,
             os.path.splitext(os.path.basename(__file__))[0] + '.log'
         )
-        console.print(f"[yellow]--logfile was not specified and therefore was set to '{logfile}'[/]")
+        print_yellow(f"--logfile was not specified and therefore was set to '{logfile}'")
 
     if outfile is None:
         outfile = os.path.join(
             outdir,
             os.path.splitext(os.path.basename(__file__))[0] + '.json'
         )
-        console.print(f"[yellow]--outfile was not specified and therefore was set to '{outfile}'[/]")
+        print_yellow(f"--outfile was not specified and therefore was set to '{outfile}'")
 
     if start_line is None:
         start_line = DEFAULT_START_LINE
-        console.print(f"[yellow]--start_line was not specified and therefore was set to '{start_line}'[/]")
+        print_yellow(f"--start_line was not specified and therefore was set to '{start_line}'")
 
     logging.basicConfig(
         filename=logfile,
@@ -222,8 +228,9 @@ def main(config_file: str, header_line: int, include_line_numbers: bool, infile:
         include_line_numbers=include_line_numbers
     )
 
-    print(f"The log file is '{logfile}'")
-    console.print(f"[bold green]Execution of '{os.path.abspath(__file__)}' completed[/]")
+    if verbose:
+        console.print(f"The log file is '{logfile}'")
+        print_green(f"Execution of '{os.path.abspath(__file__)}' completed")
 
 
 if __name__ == "__main__":

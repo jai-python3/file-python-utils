@@ -9,13 +9,17 @@ import pathlib
 import logging
 
 from datetime import datetime, timedelta
-
 from rich.console import Console
+from typing import Optional, List
 
 from .file_utils import check_indir_status
 
+DEFAULT_PROJECT = "data-file-utils"
+
 DEFAULT_OUTDIR = os.path.join(
     '/tmp/',
+    os.getenv('USER'),
+    DEFAULT_PROJECT,
     "delete-users-old-files-and-directories",
     os.path.splitext(os.path.basename(__file__))[0],
     str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))
@@ -34,6 +38,7 @@ DEFAULT_LOGGING_FORMAT = "%(levelname)s : %(asctime)s : %(pathname)s : %(lineno)
 DEFAULT_LOGGING_LEVEL = logging.INFO
 
 DEFAULT_VERBOSE = False
+
 
 error_console = Console(stderr=True, style="bold red")
 
@@ -206,10 +211,21 @@ def generate_report(
         indir: str,
         logfile: str,
         username: str,
-        delete_files_list: list,
-        delete_dirs_list: list,
+        delete_files_list: List[str],
+        delete_dirs_list: List[str],
         outfile: str = None):
+    """Generate a report of the files and directories that were deleted.
 
+    Args:
+        no_test (bool): If True, will not delete files and directories.  If False, will delete files and directories.
+        days (int): The minimum number of days ago that the files or directories were created.
+        indir (str): The directory to check for old files belonging to the specified user.
+        logfile (str): The log file.
+        username (str): The user that owns old files and directories to be deleted.
+        delete_files_list (List[str]): The list of files that were deleted.
+        delete_dirs_list (List[str]): The list of directories that were deleted.
+        outfile (str, optional): The output report file. Defaults to None.
+    """
     with open(outfile, 'w') as of:
         of.write(f"## method-created: {os.path.abspath(__file__)}\n")
         of.write(f"## date-created: {str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))}\n")
@@ -240,18 +256,34 @@ def generate_report(
     print(f"Wrote file report file '{outfile}'")
 
 
-
-
-
 def validate_verbose(ctx, param, value):
+    """Validate the verbose flag.
+
+    Args:
+        ctx (Context): The click context.
+        param (str): The parameter name.
+        value (bool): The value of the parameter.
+
+    Returns:
+        bool: The value of the parameter.
+    """
     if value is None:
         click.secho("--verbose was not specified and therefore was set to 'True'", fg='yellow')
         return DEFAULT_VERBOSE
-    # else:
-    #     print(value)
     return value
 
+
 def validate_no_test_mode(ctx, param, value):
+    """Validate the no_test flag.
+
+    Args:
+        ctx (Context): The click context.
+        param (str): The parameter name.
+        value (bool): The value of the parameter.
+
+    Returns:
+        bool: The value of the parameter.
+    """
     if value is None:
         click.secho("--no_test was not specified and therefore was set to 'True'", fg='yellow')
         return DEFAULT_NO_TEST_MODE
@@ -268,13 +300,25 @@ def validate_no_test_mode(ctx, param, value):
 @click.option('--outdir', help=f"Optional: The default is the current working directory - default is '{DEFAULT_OUTDIR}'")
 @click.option('--outfile', help="Optional: The output report file")
 @click.option('--username', help=f"Optional: The username of the account whose old files should be deleted - default is '{DEFAULT_USERNAME}'")
-@click.option('--verbose', is_flag=True, help=f"Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'", callback=validate_verbose)
-def main(days: int, indir: str, logfile: str, no_test: bool, outdir: str, outfile: str, username: str, verbose: bool):
-    """Delete user's old files"""
+@click.option('--verbose', is_flag=True, help=f"Optional: Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'.", callback=validate_verbose)
+def main(days: Optional[int], indir: Optional[str], logfile: Optional[str], no_test: Optional[bool], outdir: Optional[str], outfile: Optional[str], username: Optional[str], verbose: Optional[bool]):
+    """Delete user's old files.
+
+    Args:
+        days (Optional[int]): The number of days ago that files were created that should be deleted.
+        indir (Optional[str]): The directory to search for old user's files.
+        logfile (Optional[str]): The log file.
+        no_test (Optional[bool]): If specified, will actually delete files and directories.
+        outdir (Optional[str]): The output directory.
+        outfile (Optional[str]): The output report file.
+        username (Optional[str]): The username of the account whose old files should be deleted.
+        verbose (Optional[bool]): Will print more info to STDOUT.
+    """
 
     error_ctr = 0
 
     if error_ctr > 0:
+        click.echo(click.get_current_context().get_help())
         sys.exit(1)
 
     if indir is None:
@@ -342,8 +386,9 @@ def main(days: int, indir: str, logfile: str, no_test: bool, outdir: str, outfil
         verbose,
     )
 
-    print(f"The log file is '{logfile}'")
-    console.print(f"[bold green]Execution of '{os.path.abspath(__file__)}' completed[/]")
+    if verbose:
+        console.print(f"The log file is '{logfile}'")
+        console.print(f"[bold green]Execution of '{os.path.abspath(__file__)}' completed[/]")
     sys.exit(0)
 
 if __name__ == "__main__":

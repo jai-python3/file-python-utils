@@ -1,15 +1,16 @@
-import os
-import re
-import yaml
-import sys
+"""Find the last directory in the specified directory given a directory pattern."""
 import click
-import pathlib
 import logging
+import os
 import pathlib
+import re
+import sys
+import yaml
 
 from pathlib import Path
 from datetime import datetime
 from rich.console import Console
+from typing import Optional
 
 from .file_utils import calculate_md5, get_file_creation_date, get_file_list, get_file_size, get_line_count, check_infile_status
 from .console_helper import print_green, print_yellow
@@ -48,6 +49,12 @@ error_console = Console(stderr=True, style="bold red")
 console = Console()
 
 def profile_directory(indir: str, no_details: bool = False) -> None:
+    """Profile the files in the specified directory.
+
+    Args:
+        indir (str): The input directory to check for assets.
+        no_details (bool, optional): If True, print more details to STDOUT. Defaults to False.
+    """
     file_list = get_file_list(indir)
 
     console.print(f"Found the following '{len(file_list)}' files:")
@@ -58,6 +65,12 @@ def profile_directory(indir: str, no_details: bool = False) -> None:
         #     print("\n")
 
 def profile_file(infile: str, no_details: bool = False) -> None:
+    """Profile the specified file.
+
+    Args:
+        infile (str): The input file to profile.
+        no_details (bool, optional): If True, print more details to STDOUT. Defaults to False.
+    """
     print_green(f"[bold green]{os.path.realpath(infile)}")
     if not no_details:
         checksum = calculate_md5(infile)
@@ -70,7 +83,16 @@ def profile_file(infile: str, no_details: bool = False) -> None:
         console.print(f"[blue]line-count:[/] {line_count}")
 
 
-def find_most_recent_version_directory(directory: str, dir_pattern: str):
+def find_most_recent_version_directory(directory: str, dir_pattern: str) -> Optional[str]:
+    """Find the most recent version directory in the specified directory pattern.
+
+    Args:
+        directory (str): The directory to search for the most recent version directory.
+        dir_pattern (str): The directory pattern to filter for.
+
+    Returns:
+        str: The most recent version directory.
+    """
     # Get a list of all files in the directory
     all_files = os.listdir(directory)
 
@@ -113,6 +135,16 @@ def find_most_recent_version_directory(directory: str, dir_pattern: str):
 
 
 def validate_verbose(ctx, param, value):
+    """Validate the verbose flag.
+
+    Args:
+        ctx (Context): The click context.
+        param (str): The parameter name.
+        value (bool): The value of the parameter.
+
+    Returns:
+        bool: The value of the parameter.
+    """
     if value is None:
         click.secho("--verbose was not specified and therefore was set to 'True'", fg='yellow')
         return DEFAULT_VERBOSE
@@ -128,11 +160,23 @@ def validate_verbose(ctx, param, value):
 @click.option('--outfile', help="Optional: The output final report file")
 @click.option('--pattern', help="Optional: the filename pattern to filter for")
 @click.option('--verbose', is_flag=True, help=f"Optional: Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'.", callback=validate_verbose)
-def main(config_file: str, indir: str, logfile: str, no_details: bool, outdir: str, outfile: str, pattern: str, verbose: bool):
-    """Find most recent set of assets in specified directory."""
+def main(config_file: Optional[str], indir: str, logfile: Optional[str], no_details: Optional[bool], outdir: Optional[str], outfile: Optional[str], pattern: Optional[str], verbose: Optional[bool]):
+    """Find most recent set of assets in specified directory.
+
+    Args:
+        config_file (Optional[str]): The configuration file for this project.
+        indir (str): The input directory to check for assets.
+        logfile (Optional[str]): The log file.
+        no_details (Optional[bool]): If specified, will not show file details.
+        outdir (Optional[str]): The output directory.
+        outfile (Optional[str]): The output final report file.
+        pattern (Optional[str]): The filename pattern to filter for.
+        verbose (Optional[bool]): Will print more info to STDOUT.
+    """
     error_ctr = 0
 
     if error_ctr > 0:
+        click.echo(click.get_current_context().get_help())
         sys.exit(1)
 
     if config_file is None:

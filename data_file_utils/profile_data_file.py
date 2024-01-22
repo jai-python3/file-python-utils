@@ -1,3 +1,4 @@
+"""Profile the specified file."""
 import os
 import sys
 import click
@@ -15,7 +16,11 @@ console = Console()
 @click.command()
 @click.argument('infile', type=str, required=True)
 def main(infile: str):
-    """Profile data file."""
+    """Profile data file.
+
+    Args:
+        infile (str): The input file to profile.
+    """
 
     error_ctr = 0
 

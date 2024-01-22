@@ -120,6 +120,17 @@ def check_indir_status(indir: str = None) -> None:
 
 
 def get_file_size(file_path: str) -> int:
+    """Get the size of the specified file in bytes.
+
+    Args:
+        file_path (str): The path to the file to be checked.
+
+    Raises:
+        Exception: If the file does not exist.
+
+    Returns:
+        int: The size of the file in bytes.
+    """
     # Check if the file exists
     if os.path.exists(file_path):
         # Get the file size in bytes
@@ -130,6 +141,14 @@ def get_file_size(file_path: str) -> int:
 
 
 def get_line_count(file_path: str) -> int:
+    """Get the number of lines in the specified file.
+
+    Args:
+        file_path (str): The path to the file to be checked.
+
+    Returns:
+        int: The number of lines in the file.
+    """
     # if is_binary_file(file_path):
     #     print(f"Unable to get line count for binary file '{file_path}'")
     #     return None
@@ -146,6 +165,15 @@ def get_line_count(file_path: str) -> int:
 
 
 def is_binary_file(file_path: str, block_size: int = 1024) -> bool:
+    """Check if the specified file is a binary file.
+
+    Args:
+        file_path (str): The path to the file to be checked.
+        block_size (int, optional): The block size. Defaults to 1024.
+
+    Returns:
+        bool: If the file is binary, returns True. Otherwise, returns False.
+    """
     try:
         with open(file_path, 'rb') as file:
             block = file.read(block_size)
@@ -169,4 +197,35 @@ def is_binary_file(file_path: str, block_size: int = 1024) -> bool:
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
+
+def get_file_list_from_directory(indir: str = None, extension: str = None) -> list:
+    """Get the list of files in the specified directory.
+
+    Args:
+        indir (str): The directory to search for files.
+        extension (str): The file extension to filter on.
+
+    Returns:
+        List[str]: The list of files found in the directory.
+    """
+    if extension is None:
+        logging.info(f"Going to search for files in directory '{indir}'")
+    else:
+        logging.info(f"Going to search for files with extension '{extension}' in directory '{indir}'")
+
+    file_list = []
+    for dirpath, dirnames, filenames in os.walk(indir):
+        if 'venv' in dirpath:
+            logging.info(f"Going to ignore files in directory '{dirpath}'")
+            continue
+        for name in filenames:
+            file_path = os.path.normpath(os.path.join(dirpath, name))
+            if os.path.isfile(file_path):
+                if extension is not None:
+                    if file_path.endswith(f'.{extension}'):
+                        file_list.append(file_path)
+                else:
+                    file_list.append(file_path)
+
+    return file_list
 

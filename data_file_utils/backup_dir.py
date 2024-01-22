@@ -1,14 +1,8 @@
 """Backup a file."""
-import logging
 import os
 import sys
 import click
-import pathlib
-import logging
-import pathlib
 import shutil
-
-from pathlib import Path
 
 from datetime import datetime
 from rich.console import Console
@@ -16,13 +10,6 @@ from rich.console import Console
 from .file_utils import check_indir_status
 
 DEFAULT_TIMESTAMP = str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))
-
-
-DEFAULT_LOGGING_FORMAT = "%(levelname)s : %(asctime)s : %(pathname)s : %(lineno)d : %(message)s"
-
-DEFAULT_LOGGING_LEVEL = logging.INFO
-
-DEFAULT_VERBOSE = True
 
 
 error_console = Console(stderr=True, style="bold red")
@@ -33,7 +20,11 @@ console = Console()
 @click.command()
 @click.argument('indir', type=str, required=True)
 def main(indir: str):
-    """Backup a file in-place."""
+    """Backup a directory in-place.
+
+    Args:
+        indir (str): The directory to be backed up in-place.
+    """
 
     error_ctr = 0
 

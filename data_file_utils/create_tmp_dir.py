@@ -26,7 +26,7 @@ def main():
     purpose = None
     while purpose is None or purpose == "":
         purpose = input("Enter the purpose of the directory: ")
-        purpose = purpose.strip()
+        purpose = purpose.strip().replace(" ", "_")
 
     outdir = os.path.join(root, userdir, purpose, DEFAULT_TIMESTAMP)
 

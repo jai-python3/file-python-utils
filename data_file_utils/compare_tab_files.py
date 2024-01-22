@@ -1,21 +1,22 @@
 """Compare two sorted review files line-by-line and column-by-column."""
-import os
-import sys
 import click
-import pathlib
 import logging
+import os
 import pathlib
+import sys
 
 import xlsxwriter
 
 from typing import Dict, Optional
 from datetime import datetime
 from rich.console import Console
-from rich.logging import RichHandler
 
+from file_utils import check_infile_status
+
+
+DEFAULT_PROJECT = 'data-file-utils'
 
 DEFAULT_IGNORE_COLUMNS = False
-
 
 HEADER_LINE = 1
 RECORDS_START_LINE = 2
@@ -23,6 +24,8 @@ MAX_COLUMN_COUNT = 0
 
 DEFAULT_OUTDIR = os.path.join(
     '/tmp/',
+    os.getenv('USER'),
+    DEFAULT_PROJECT,
     os.path.splitext(os.path.basename(__file__))[0],
     str(datetime.today().strftime('%Y-%m-%d-%H%M%S'))
 )
@@ -43,7 +46,7 @@ DEFAULT_LOGGING_FORMAT = "%(levelname)s : %(asctime)s : %(pathname)s : %(lineno)
 
 DEFAULT_LOGGING_LEVEL = logging.INFO
 
-DEFAULT_VERBOSE = True
+DEFAULT_VERBOSE = False
 
 
 error_console = Console(stderr=True, style="bold red")
@@ -52,6 +55,14 @@ console = Console()
 
 
 def get_column_number_to_column_letters_lookup(max_column_number: int = MAX_COLUMN_COUNT) -> Dict[int, str]:
+    """Get a lookup of column numbers to column letters.
+
+    Args:
+        max_column_number (int, optional): The maximum number of columns. Defaults to MAX_COLUMN_COUNT.
+
+    Returns:
+        Dict[int, str]: The lookup of column numbers to column letters.
+    """
     column_numbers = [x for x in range(max_column_number)]
     lookup = {}
     for column_number in column_numbers:
@@ -62,8 +73,12 @@ def get_column_number_to_column_letters_lookup(max_column_number: int = MAX_COLU
     return lookup
 
 
-def read_file(file_path):
-    """Read a tab-delimited file and return its content as a list of lists."""
+def read_file(file_path: str):
+    """Read a tab-delimited file and return its content as a list of lists.
+
+    Args:
+        file_path (str): The path to the file to be read.
+    """
     logging.info(f"Going to read file '{file_path}'")
     with open(file_path, 'r', encoding="latin-1") as file:
         lines = file.readlines()
@@ -85,8 +100,15 @@ def get_ignore_columns_lookup(ignore_columns_str: str) -> Dict[str, bool]:
     return ignore_columns_lookup
 
 
-def compare_files(file1_path, file2_path, ignore_columns: bool, ignore_columns_str: Optional[str]):
-    """Compare two tab-delimited files and store differences."""
+def compare_files(file1_path: str, file2_path: str, ignore_columns: bool, ignore_columns_str: Optional[str]):
+    """Compare two tab-delimited files and store differences.
+
+    Args:
+        file1_path (str): The path to the first file to be compared.
+        file2_path (str): The path to the second file to be compared.
+        ignore_columns (bool): Whether to ignore columns.
+        ignore_columns_str (Optional[str]): The comma-separated list of columns to be ignored.
+    """
     header1, header_index_to_name_lookup1, header_name_to_index_lookup1, data1 = read_file(file1_path)
     header2, header_index_to_name_lookup2, header_name_to_index_lookup2, data2 = read_file(file2_path)
 
@@ -97,7 +119,7 @@ def compare_files(file1_path, file2_path, ignore_columns: bool, ignore_columns_s
     #     print("Headers of the two files are different.")
     #     return
 
-    logging.info(f"Going to compare contents of the two files now")
+    logging.info("Going to compare contents of the two files now")
 
     max_rows = max(len(data1), len(data2))
     differences = []
@@ -137,113 +159,35 @@ def compare_files(file1_path, file2_path, ignore_columns: bool, ignore_columns_s
     return differences
 
 
-def compare_files_v1(file1_path, file2_path):
-    """Compare two tab-delimited files and store differences."""
-    header1, data1 = read_file(file1_path)
-    header2, data2 = read_file(file2_path)
 
-    logging.info(f"Going to compare contents of the two files now")
-    # if header1 != header2:
-    #     print("Headers of the two files are different.")
-    #     return
-
-    # differences = []
-
-    # for i, (row1, row2) in enumerate(zip(data1, data2), start=2):
-    #     for j, (cell1, cell2) in enumerate(zip(row1, row2), start=1):
-    #         if cell1 != cell2:
-    #             differences.append((i, header1[j-1], j, cell1, cell2))
-
-    max_rows = max(len(data1), len(data2))
-    differences = []
-
-    for i in range(1, max_rows + 1):
-        if i <= len(data1):
-            row1 = data1[i - 1]
-        else:
-            row1 = [""] * len(header1)
-
-        if i <= len(data2):
-            row2 = data2[i - 1]
-        else:
-            row2 = [""] * len(header2)
-
-        for j, (cell1, cell2) in enumerate(zip(row1, row2), start=1):
-            if cell1 != cell2:
-                differences.append((i, header1[j - 1], j, cell1, cell2))
-
-    return differences
-
-
-
-def check_infile_status(infile: str = None, extension: str = None) -> bool:
-
-
-    """Check if the file exists, if it is a regular file and whether it has content.
+def validate_verbose(ctx, param, value):
+    """Validate the validate option.
 
     Args:
-        infile (str): the file to be checked
+        ctx (Context): The click context.
+        param (str): The parameter.
+        value (bool): The value.
 
-    Raises:
-        None
+    Returns:
+        bool: The value.
     """
 
-    error_ctr = 0
-
-    if infile is None or infile == '':
-        error_console.print(f"'{infile}' is not defined")
-        error_ctr += 1
-    else:
-        if not os.path.exists(infile):
-            error_ctr += 1
-            error_console.print(f"'{infile}' does not exist")
-        else:
-            if not os.path.isfile(infile):
-                error_ctr += 1
-                error_console.print(f"'{infile}' is not a regular file")
-            if os.stat(infile).st_size == 0:
-                error_console.print(f"'{infile}' has no content")
-                error_ctr += 1
-            if extension is not None and not infile.endswith(extension):
-                error_console.print(f"'{infile}' does not have filename extension '{extension}'")
-                error_ctr += 1
-
-    if error_ctr > 0:
-        error_console.print(f"Detected problems with input file '{infile}'")
-        sys.exit(1)
-
-
-def setup_filehandler_logger(logfile: str = None):
-
-    # Create handlers
-    # c_handler = logging.StreamHandler()
-    f_handler = logging.FileHandler(filename=logfile)
-
-    # c_handler.setLevel(DEFAULT_LOGGING_LEVEL)
-    f_handler.setLevel(DEFAULT_LOGGING_LEVEL)
-
-    # Create formatters and add it to handlers
-    f_format = logging.Formatter(DEFAULT_LOGGING_FORMAT)
-    # c_format = logging.Formatter("%(levelname)-7s : %(asctime)s : %(message)s")
-
-    # c_handler.setFormatter(c_format)
-    f_handler.setFormatter(f_format)
-
-    # Add handlers to the logger
-    # logging.addHandler(c_handler)
-    logging.addHandler(f_handler)
+    if value is None:
+        click.secho("--verbose was not specified and therefore was set to 'True'", fg='yellow')
+        return DEFAULT_VERBOSE
+    return value
 
 
 @click.command()
 @click.option('--ignore_columns', is_flag=True, help=f"Optional: Ignore columns specified in --ignore_columns_str - default is '{DEFAULT_IGNORE_COLUMNS}'")
-@click.option('--ignore_columns_str', help=f"Optional: comma-separated list of column headers wrapped in quotes")
+@click.option('--ignore_columns_str', help="Optional: comma-separated list of column headers wrapped in quotes")
 @click.option('--logfile', help="Optional: The log file")
-@click.option('--outdir', help="Optional: The output directory where logfile and default output file will be written - default is '{DEFAULT_OUTDIR}'")
-@click.option('--outfile', help="Optional: The output file to which differences will be written to - default is '{DEFAULT_OUTFILE}'")
+@click.option('--outdir', help=f"Optional: The output directory where logfile and default output file will be written - default is '{DEFAULT_OUTDIR}'")
+@click.option('--outfile', help=f"Optional: The output file to which differences will be written to - default is '{DEFAULT_OUTFILE}'")
 @click.option('--tab_file_1', help="Required: The first sorted review file (.tsv)")
 @click.option('--tab_file_2', help="Required: The second sorted review file (.tsv)")
-@click.option('--verbose', is_flag=True, help=f"Optional: Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'")
-def main(ignore_columns: bool, ignore_columns_str: str, logfile: str, outdir: str, outfile: str, tab_file_1: str, tab_file_2: str, verbose: bool):
+@click.option('--verbose', is_flag=True, help=f"Will print more info to STDOUT - default is '{DEFAULT_VERBOSE}'.", callback=validate_verbose)
+def main(ignore_columns: Optional[bool], ignore_columns_str: Optional[str], logfile: Optional[str], outdir: Optional[str], outfile: Optional[str], tab_file_1: str, tab_file_2: str, verbose: Optional[bool]):
     """Compare two sorted review files line-by-line and column-by-column."""
 
     error_ctr = 0
