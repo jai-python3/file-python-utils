@@ -23,5 +23,5 @@ The following exported scripts are available:
 
 ## References
 
-* [GitHub](https://github.com/jai-python3/jira-python-utils)
-* [PYPI](https://pypi.org/project/jira-python-utils/)
+* [GitHub](https://github.com/jai-python3/data-file-utils)
+* [PYPI](https://pypi.org/project/data-file-utils/)

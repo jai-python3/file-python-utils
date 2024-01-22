@@ -3,7 +3,6 @@
 Collection of  Python scripts/utils for facilitating file manipulation tasks.
 
 - [Data File Utils](#data-file-utils)
-  - [Motivation](#motivation)
   - [Improvements](#improvements)
   - [Use Cases](#use-cases)
   - [Installation](#installation)
@@ -27,12 +26,6 @@ Collection of  Python scripts/utils for facilitating file manipulation tasks.
 
 
 
-## Motivation
-
-Explain what the motivation was for developing this package OR<br>
-explain how this package was improved after being forked.
-
-
 ## Improvements
 
 Please see the [TODO](TODO.md) for a list of upcoming improvements.
@@ -45,7 +38,7 @@ Please see the [TODO](TODO.md) for a list of upcoming improvements.
 
 ## Installation
 
-See the install [instructions](INSTALL.md).
+See the install [instructions](docs/INSTALL.md).
 
 ## Generate shell wrapper scripts
 
@@ -58,7 +51,8 @@ where dir is the directory that contains the aliases file.
 
 ## Exported scripts
 
-To use the following exported scripts:
+The following exported console scripts are available:
+
 - analyze-record-tuples
 - archive-dir
 - backup-dir

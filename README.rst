@@ -3,18 +3,29 @@ Data File Utils
 ===============
 
 
-
-
-
-
-Collection of Python scripts/utils for file manipulation tasks
+  Collection of Python scripts/utils for file manipulation tasks.
 
 
 
 Features
 --------
 
-* TODO
+The following exported console scripts are available:
+
+- analyze-record-tuples
+- archive-dir
+- backup-dir
+- backup-file
+- compare-tab-files
+- create-tmp-dir
+- delete-old-files
+- find-last-directory
+- find-last-file
+- jsonl2json
+- profile-data-file
+- tsv2json
+- xlsx2tsv
+
 
 Credits
 -------
