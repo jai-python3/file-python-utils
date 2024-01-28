@@ -13,8 +13,8 @@ from pathlib import Path
 from rich.console import Console
 from typing import Any, Dict, Optional
 
-from file_utils import check_infile_status
-from console_helper import print_green, print_red, print_yellow
+from .file_utils import check_infile_status
+from .console_helper import print_green, print_red, print_yellow
 
 
 DEFAULT_PROJECT = "data-file-utils"
@@ -99,7 +99,8 @@ def get_record_lookup(infile: str, header_line: int = 2, start_line: int = 3, in
 
     header_to_position_lookup = {}
     position_to_header_lookup = {}
-    record_list = []
+    # record_list = []
+    master_record_lookup = {}
     record_ctr = 0
 
     with open(infile) as f:
@@ -122,11 +123,12 @@ def get_record_lookup(infile: str, header_line: int = 2, start_line: int = 3, in
                 for field_ctr, value in enumerate(row):
                     field_name = position_to_header_lookup[field_ctr]
                     record_lookup[field_name] = value
-                record_list.append(record_lookup)
+                # record_list.append(record_lookup)
+                master_record_lookup[line_num] = record_lookup
                 record_ctr += 1
         logging.info(f"Processed '{record_ctr}' records in csv file '{infile}'")
 
-    return record_list
+    return master_record_lookup
 
 
 def validate_verbose(ctx, param, value):
