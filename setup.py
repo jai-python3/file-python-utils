@@ -36,6 +36,7 @@ setup(
     description="Collection of Python scripts/utils for file manipulation tasks",
     entry_points={
         'console_scripts': [
+            'csv2tsv=data_file_utils.csv2tsv:main',
             'tsv2json=data_file_utils.tsv2json:main',
             'analyze-record-tuples=data_file_utils.analyze_record_tuples:main',
             'compare-tab-files=data_file_utils.compare_tab_files:main',

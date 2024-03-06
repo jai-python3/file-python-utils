@@ -47,31 +47,11 @@ DEFAULT_LOGGING_FORMAT = "%(levelname)s : %(asctime)s : %(pathname)s : %(lineno)
 
 DEFAULT_LOGGING_LEVEL = logging.INFO
 
-DEFAULT_VERBOSE = True
-
+DEFAULT_VERBOSE = False
 
 error_console = Console(stderr=True, style="bold red")
 
 console = Console()
-
-
-DEFAULT_VERBOSE = False
-
-def validate_verbose(ctx, param, value):
-    """Validate the --verbose command-line option.
-
-    Args:
-        ctx (context): The context.
-        param (str): The parameter name.
-        value (bool): The boolean value.
-
-    Returns:
-        bool: The boolean value.
-    """
-    if value is None:
-        click.secho("--verbose was not specified and therefore was set to 'True'", fg='yellow')
-        return DEFAULT_VERBOSE
-    return value
 
 
 def get_column_number_to_column_letters_lookup(max_column_number: int = MAX_COLUMN_COUNT) -> Dict[int, str]:
@@ -332,6 +312,24 @@ def generate_duplicates_report(
 
     logging.info(f"Wrote duplicate records report file '{outfile}'")
     print(f"Wrote duplicate records report file '{outfile}'")
+
+
+def validate_verbose(ctx, param, value):
+    """Validate the validate option.
+
+    Args:
+        ctx (Context): The click context.
+        param (str): The parameter.
+        value (bool): The value.
+
+    Returns:
+        bool: The value.
+    """
+
+    if value is None:
+        click.secho("--verbose was not specified and therefore was set to 'True'", fg='yellow')
+        return DEFAULT_VERBOSE
+    return value
 
 
 @click.command()
